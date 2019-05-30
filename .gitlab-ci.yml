@@ -10,14 +10,12 @@ upload_egg:
     - curl "https://bootstrap.pypa.io/get-pip.py" -o "get-pip.py"
     - python get-pip.py
     - pip install pyOpenSSL ndg-httpsclient pyasn1
-    - pip install -U devpi-client
     - pip install .
     - pip show $CI_PROJECT_NAME
     
-    # Upload to Wish Pypi
-    - devpi use $PYPI_SERVER
-    - devpi login $USERNAME --password=$PASSWORD
-    - devpi use $INDEX
-    - devpi upload
+    # Upload to pypicloud
+    - pip install twine
+    - python setup.py sdist
+    - twine upload --repository-url $PYPI_SERVER --username $USERNAME --password $PASSWORD dist/*
   only:
     - master
